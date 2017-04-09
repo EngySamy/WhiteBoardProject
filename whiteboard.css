@@ -1,0 +1,129 @@
+
+	body, html { 
+		height:100%;
+		padding:0px;
+		margin:0px;
+	}
+	
+	#canvas {
+		background-color:#fffff9;
+		margin:0px;
+		padding:0px;
+		height: 100%;
+		position:relative;
+		right:0px;
+		cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABd0lEQVRIS7XVv0ofQRSG4UdbDXgHgo1gkxsIggS8BhFsbFJYpAhItBJEUliIImJlIVhIQLAQSZEUFilSBBsvwEIsBC0slRBGZsJm3F13furANsvu957znT/T55VP3yvrey4g/P8OYzjAVR7wcwD9mMYW3uAQc7ioQnoF5OJJ8yhCztOLXgEDWMHHmhr+BykFhMincI9jLDdAvuIDbkoAVVvuohUh2jrIz1if866AqvgJvmGpAXKLRWyHTLsAcvENfMIkrjPIbMxoLdr45BxUxX9gHZ+jeKpvFTIesws1ejhtGXQRTzqXmMH3roNWIh48D4X+Z8tTg/Zi4nUWvah4Dsi7JaQ8nxU0Zd9qS51FVfEzhFUQnpGaVdBZvJrBKPbxCwt4ix0MZ4Ai8TrAKvZi+05kkGLxOsCfeGmEUf+N99jFYFsrtt2KadCSRcGacMItdRpX8qPxL7lmmwDF3dIETYDQLV8wlH0Ydv5mWlwlkXfZRb3oPfrnL782bhnrilZkAAAAAElFTkSuQmCC), auto;
+	}
+	
+	#container
+	{
+	  height: 100%;
+	  position: relative;
+	  width: 100%;
+	  padding: 0px;
+	  margin:0px;
+	}
+	
+	#controls
+	{
+	  height: 100%;
+	  position: relative;
+	  padding: 0px;
+
+	}
+	.item {height:11%; width:100%;}
+	
+
+	.hund {height: 100%; width: 100%; padding:0px; margin: 0px;}
+	.right
+	{
+		float:right;
+	}
+	
+	#myColo {
+    
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABqElEQVRIS63VP0hVYRzG8c8toURanEpplGwObGmu5igQSiIoi8DBgqBAJPpDSzSYgkgEUbS2uLgIQUPSGGi05ODqYEgNgfK7vMnhcM+979H7wuHCue/7fN/fv+c0dHc1MIyL+I7P8aJb6xBGMYP+JPqgW4Ae3MFzHCvceLEbgCO4l8TL2Zg/KKAPj9JTFv+NsYMAIs8vcKuiiO8wsV/AIF7hSoV43P4ylvYDGMJrnG/TfvOYxJ+6gDOYxdk24uvp9t9iTx3AabztIB6a0arT+FcHcDgdmuowlV9wDb/+78uNoDcV9XYHwBg+YKcu4Che4m4bwEIq7HZxT24EceYq3lcAvuIGVsv/VwHCuKIdz2EAP7GYBqscxQ+Mh3O2grcCxIQ+KaUjWu86VtJvuObxBA333CtqqwjCCZsthTCuZ7jf4jabeIo32Mr1+IggpjKeNYzgE07kTGkOJABR/UupgKdwocPBPRvIBTys8PKq83MphX9zATlpKWrdTHXI0W96Ue6UhuByfESwkaVeMLscI2vb71XA4hycxONktcUPd5z9mMwuBq7W2gV0V0o+ooOLQgAAAABJRU5ErkJggg==);
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding-left: 40px;
+	}
+	
+	.theme {
+		background-color:#236467;
+		color:white;
+		border-style:none;
+	}
+	.txtDark {
+		color:#236467;
+	}
+			
+	.theme1.active.focus, .theme1.active:focus, .theme1.active:hover, .theme1:active.focus, .theme1:active:focus,
+	.theme1:active:hover, .open>.dropdown-toggle.theme1.focus,
+	.open>.dropdown-toggle.theme1:focus, .open>.dropdown-toggle.theme1:hover ,.theme1:hover	{	
+		color:white;
+		border-style:none;
+		background-color: #033D40;
+	}
+	
+	.theme1:focus,.theme1:active {
+		color:white;
+		border-style:none;
+		background-color: #13585B;
+
+	}
+	
+	
+	.inputButton {
+		background-color: #ffffff;
+		border: none;
+	}
+	
+	hr { 
+		display: block;
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		margin-left: auto;
+		margin-right: auto;
+		border-style: inset;
+		width:50%;
+	} 
+	
+	.dotted{
+	  border:none;
+	  border-top:2px dotted ;
+	  width:50%;
+	}
+	
+	#coolMenu,
+	#coolMenu ul {
+		list-style: none;
+		
+		
+	}
+	#coolMenu {
+		float: left;
+
+		min-width: auto;
+		white-space: nowrap;
+	}
+	#coolMenu > li {
+		float: left;
+	}
+	#coolMenu li a {
+		display: block;
+		height: 2em;
+		line-height: 2em;
+		padding: 0 1.5em;
+		text-decoration: none;
+	}
+	#coolMenu ul {
+		position: absolute;
+		display: none;
+		z-index: 999;
+	}
+	#coolMenu ul li a {
+		width: 80px;
+	}
+	#coolMenu li:hover ul {
+		display: block;
+	}

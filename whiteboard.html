@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!-- Load font awsome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+<!-- Load jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Load bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="dist/paper-full.js"></script>
+
+<link rel="stylesheet" href="whiteboard.css">
+<script src="whiteboard.js"></script>
+
+<script type="text/paperscript"  canvas="canvas">
+	tool.minDistance = 10;
+	tool.maxDistance = 25;
+	// styles: 1 = pencil ,, 2 = Line ,, 3 = brush ,, 4 = dashed pencil ,, 5 = dashed line ,, 6=text  ,, 0 = cut ,, -1 erase
+	var path;
+	var strokeEnds = 6;
+	function onMouseDown(event) {	
+		//for clearing the canvas
+		if(clearCanvas && project.activeLayer.hasChildren()){
+			project.activeLayer.removeChildren();
+			clearCanvas = false;
+		}
+		
+		if(style==6) //adding text
+		{		
+			var txt = new PointText({
+				point: event.point,
+				content: text,
+				fillColor: color,
+				fontFamily: 'Courier New',
+				fontWeight: 'bold',
+				fontSize: 25
+			});
+			text="";
+			document.getElementById("Txt1").value="";
+			autoCursor();
+		}
+		else {
+			path = new Path();
+			path.strokeWidth = width;
+			path.strokeColor = color ;
+			path.fillColor=null;
+			
+			if(style==4 || style==5)   //dashed lines 
+				path.dashArray = [15, 10];						
+			if(style==3) //brush
+			{
+				//path.fillColor=color;
+			}
+			else if(style==0) //cut
+			{
+				path.fillColor=color;
+			}
+			else 
+			{
+				path.strokeColor = color ;				
+				path.add(event.point);
+			}		
+		}
+	
+	}
+	var lastPoint;
+	function onMouseDrag(event) {
+		if(style!=2 && style !=5 &&style!=6){ //not a line 
+			if(style==3 && event.count == 0){
+				//if() { //brush
+					addStrokes(event.middlePoint, event.delta * -1);
+				/*} else {
+				
+					var step = 10;
+
+					var top = event.middlePoint + step;
+					var bottom = event.middlePoint - step;
+
+					path.add(top);
+					path.insert(0, bottom);
+				}*/
+			}
+			else {  // other styles => 
+				path.add(event.point);
+			}
+			
+			path.smooth();
+			lastPoint = event.middlePoint;
+		}
+		
+	}
+	
+	function onMouseUp(event) {
+		if(style==3)
+		{
+			var delta = event.point -lastPoint;
+			delta.length = tool.maxDistance;
+			addStrokes(event.point, delta);
+		}
+		else if (style==2 || style ==5)
+			path.add(event.point);
+		path.smooth();
+	}
+	
+	function addStrokes(point, delta) {
+		var wd = width ;
+		width=1;
+		path.strokeWidth = 1 ;
+		
+		var step = delta.rotate(90);
+		var strokePoints = strokeEnds * 2 + 1;
+		point -= step / 2;
+		step /= strokePoints - 1;
+		for(var i = 0; i < strokePoints; i++) {
+			var strokePoint = point + step * i;
+			var offset = delta * (Math.random() * 0.3 + 0.1);
+			if(i % 2) {
+				offset *= -1;
+			}
+			strokePoint += offset;
+			path.insert(0, strokePoint);
+		}
+		path.strokeWidth = wd ;
+		width=wd;
+	}	
+
+</script>
+
+</head>
+
+<body >
+	<div class="row" id="container">
+		<div id="controls" class="col-lg-1 col-md-1 col-sm-2 col-xs-3 theme btn-group-vertical " >
+		<div class="btn-group-vertical hund ">
+			<div class="item btn-group ">				
+				<button class="btn btn-default dropdown dropdown-toggle hund theme theme1" data-toggle="dropdown">
+					<i class="fa fa-paint-brush fa-lg" aria-hidden="true"></i>
+				</button>
+					<ul class="dropdown-menu right" style=" text-align: center; min-width:50%;" >
+						<li> <a href="#" onclick="blue()" style="color:#2323B2"> <i class="fa fa-paint-brush" aria-hidden="true"></i> </a> </li>
+						<li> <a href="#" onclick="green()" style="color:#1cbf79"> <i class="fa fa-paint-brush" aria-hidden="true"></i> </a> </li>
+						<li> <a href="#" onclick="red()" style="color:#DF0010"> <i class="fa fa-paint-brush" aria-hidden="true"></i> </a> </li>
+						<li> <a href="#" onclick="black()" style="color:#000000"> <i class="fa fa-paint-brush" aria-hidden="true"></i> </a> </li>						
+						<li> <a href="#"  >   
+							<input type="color" id="myColor"  onclick="customColor()" onchange="customColor()" > </a></li>
+					</ul>				
+			</div>
+			
+			<div class="item btn-group">
+				<button class="btn btn-default dropdown dropdown-toggle hund theme theme1" data-toggle="dropdown">
+					<i class="fa fa-circle fa-lg" aria-hidden="true"></i>
+				</button>
+					<ul class="dropdown-menu right" style="text-align: center; center; min-width:50%;">
+						<li> <a href="#" onclick="size1()"> <i class="fa fa-circle txtDark" aria-hidden="true" ></i> </a></li>
+						<li> <a href="#" onclick="size2()"> <i class="fa fa-circle fa-lg txtDark" aria-hidden="true" ></i></a></li>
+						<li> <a href="#" onclick="size3()"> <i class="fa fa-circle fa-2x txtDark" aria-hidden="true" ></i></a></li>
+					</ul>
+			</div>
+			
+			<div class="item btn-group">
+				<button class="btn btn-default dropdown dropdown-toggle hund theme theme1" data-toggle="dropdown">
+					<i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+				</button>
+					<ul class="dropdown-menu right" style="color:#555555; text-align: center; min-width:50%">
+						<li> <a href="#" onclick="pencilLine()" >Pencil</a> </li>
+						<li> <a href="#" onclick="dashLine()">Dashed Pencil</a> </li>
+						<li> <a href="#" onclick="straightLine()"><hr></a> </li>
+						<li> <a href="#" onclick="dashStraightLine()"><hr class="dotted"></a> </li>
+						<!--<li> <a href="#" onclick="brushLine()">Brush</a> </li>-->
+						
+					</ul>
+			</div>
+			
+			<div class="item btn-group">
+				<button class="btn btn-default dropdown dropdown-toggle hund theme theme1" data-toggle="dropdown">
+					<i class="fa fa-eraser fa-lg" aria-hidden="true"></i>
+				</button>
+				<ul class="dropdown-menu right" style="color:#236467; text-align: center; min-width:50%">
+					<li> <a href="#" onclick="size1_eraser()" ><i class="fa fa-eraser txtDark" aria-hidden="true"></i></a> </li>
+					<li> <a href="#" onclick="size2_eraser()"><i class="fa fa-eraser fa-lg txtDark" aria-hidden="true"></i></a> </li>
+					<li> <a href="#" onclick="size3_eraser()"><i class="fa fa-eraser fa-2x txtDark" aria-hidden="true"></i></a> </li>
+					<li> <a href="#" onclick="cut_eraser()"> <i class="fa fa-scissors fa-lg txtDark" aria-hidden="true"> </i></a> </li>
+					<li> <a href="#" onclick="clearAll()"><i class="fa fa-trash-o fa-lg txtDark" aria-hidden="true"></i></a> </li>
+				</ul>
+			</div>
+			
+			<div class="item btn-group">
+				<button class="btn btn-default dropdown dropdown-toggle hund theme theme1" data-toggle="dropdown">
+					<i class="fa fa-i-cursor fa-lg" aria-hidden="true"></i>
+				</button>
+				<ul class="dropdown-menu right" id="txtdropdown"> 
+					<li class="dropdown-header">Type your text here</li>
+					<li style="padding-left:7px; padding-right:7px;"> <div class="form-group">      
+							<input type="text" id="Txt1" style="color:#000000"/>
+							<input type="submit" id="Submit1" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" onclick="addText()"/>
+							<script>
+								$('#Txt1').on('keyup', function(e) {
+									if (e.keyCode === 13) {
+										$('#Submit1').click();
+									}
+								});
+								 $('#Submit1').click(function() { 
+									$(".dropdown-toggle").dropdown("toggle");
+								});
+							</script>
+						</div> 
+					</li>
+				</ul>
+					
+			</div>
+			<div class="item btn-group">
+				<button class="btn btn-default hund theme theme1" onclick="convertCanvasToImage()" > 
+					<i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+				</button>
+					
+			</div>
+				
+		</div>				
+		</div>	
+		
+		<canvas id="canvas" class="col-lg-11 col-md-11 col-sm-10 col-xs-9" ></canvas>
+
+		
+	</div>
+	
+</body>
